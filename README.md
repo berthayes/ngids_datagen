@@ -1,7 +1,7 @@
 # ngids_datagen
- Generate random data from your Bertronix 2000 Firewall
+ Generate random data from your Bertronix 2000 Firewall and send them to Apache Kafka.
 
- This is Yet Another Random Data Generator.  There are others like it, but this one is mine.  This DG will create *real-ish looking* events from a fictional Next-Gen Firewall.
+ This is Yet Another Random Data Generator.  There are others like it, but this one is mine.  This DG will create *real-ish looking* events from a fictional Next-Gen Firewall/IDS/IPS.
 
  This is handy for load testing, running your own example code, or developing your own apps, etc.
 
@@ -56,7 +56,7 @@ optional arguments:
 
 The datagen.py script looks for a file called ```host2ip.txt``` by default that contains a list of hostname:ip mappings as JSON objects.  These are (at the time of this writing) real hostname to IP mappings.
 
-Use the url_host_resolver.py script to read a file containing a list of URLs and lookup the IP address for the corresponding hostnema.  This script will re-create the ```host2ip.txt``` file if/when needed.
+Use the url_host_resolver.py script to read a file containing a list of URLs and lookup the IP address for the corresponding hostname.  This script will re-create the ```host2ip.txt``` file if/when needed.
 
 ```
 $ ./url_host_resolver.py -h
@@ -72,4 +72,4 @@ optional arguments:
 ```
 
 
-user_profile_hash_maker.py is a script that creats a dictionary of usernames to MAC:IP:user_agent strings.  This is to make the fake data look a little more life-like.  The idea is that each user will have used 3 different devices on the same LAN, so generated data should reflect this and not give a completely random combination of username,mac,ip,user_agent for every event generated.
+user_profile_hash_maker.py is a script that creats a dictionary of usernames to MAC:IP:user_agent strings.  This is to make the fake data look a little more life-like.  The idea is that each user will have used 3 different devices on the same LAN, so generated data should reflect this and not give a completely random combination of username,mac,ip,user_agent for every event generated.  This script is called from the datagen.py script.

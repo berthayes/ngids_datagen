@@ -14,7 +14,6 @@ import user_profile_hash_maker as uphm
 import argparse
 
 # Parse args - get money
-#count = 0
 parser = argparse.ArgumentParser(description=
     '''This script generates a real-looking fake IDS event and sends it to your Kafka cluster''')
 parser.add_argument('-c', dest='count', action='store', default=-1, help='how many events to generate and send to Kafka - default is infinite' )
@@ -22,8 +21,8 @@ parser.add_argument('-t', dest='time_delay', action='store', default=0, help='ho
 
 args = parser.parse_args()
 
-urls = './shorter_urls.txt'
-mimetypes = './mimetypes.txt'
+urls = './wordlists/shorter_urls.txt'
+mimetypes = './wordlists/mimetypes.txt'
 host2ip = './host2ip.txt'
 
 producer = KafkaProducer(bootstrap_servers=['192.168.1.108:9092'])

@@ -73,9 +73,9 @@ class make_hash:
 
 	def make_username_useragent_lists():
 
-		last_names = './uniq_last_names.txt'
-		first_names = './uniq_first_names.txt'
-		user_agents = './uniq_user_agents.txt'
+		last_names = './wordlists/uniq_last_names.txt'
+		first_names = './wordlists/uniq_first_names.txt'
+		user_agents = './wordlists/uniq_user_agents.txt'
 
 		# create a last_names[] array
 		with open(last_names, 'rt') as lnames:

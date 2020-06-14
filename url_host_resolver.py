@@ -15,7 +15,6 @@ import json
 import time
 import argparse
 
-# Parse args - get money
 parser = argparse.ArgumentParser(description=
     '''This script reads a file of URLs and resolves hostnames to create a file of hostname:IP JSON objects''')
 parser.add_argument('-i', dest='urls', action='store', default='./urls.txt', help='Input file of URLs - one per line, please' )
@@ -28,7 +27,7 @@ bofh = 0 # you'll know
 if args.urls:
 	urls = args.urls
 else:
-	urls = './urls.txt'
+	urls = './wordlists/urls.txt'
 
 if args.json_output:
 	json_output = args.json_output

@@ -17,7 +17,7 @@ import hashlib
 
 args = random.randrange(2,6)
 
-urls = './urls.txt'
+urls = './wordlists/urls.txt'
 with open(urls,'rt') as urls:
 	url_list = []
 	for line in urls:
