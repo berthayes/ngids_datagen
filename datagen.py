@@ -17,8 +17,8 @@ import argparse
 #count = 0
 parser = argparse.ArgumentParser(description=
     '''This script generates a real-looking fake IDS event and sends it to your Kafka cluster''')
-parser.add_argument('-c', dest='count', action='store', default=-1, help='how many events to generate and send to Kafka' )
-parser.add_argument('-t', dest='time_delay', action='store', default=0, help='how many seconds to wait between creating events')
+parser.add_argument('-c', dest='count', action='store', default=-1, help='how many events to generate and send to Kafka - default is infinite' )
+parser.add_argument('-t', dest='time_delay', action='store', default=0, help='how many seconds to wait between creating events - default is 0')
 
 args = parser.parse_args()
 
