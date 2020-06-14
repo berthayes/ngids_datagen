@@ -1,13 +1,14 @@
 #!/usr/local/bin/python3
 
 # Create a dictionary "user_profile" with the username as the key
-# value is a array "profiles" of three ip/mac/user_agent combos
+# value is an array of three ip/mac/user_agent combos: "profiles[]" 
 
 # The idea is that each user probably uses [up to] 3 different
 # devices on the same office subnet.
 
 # Each of those devices will a consistent IP:MAC pair as well as
 # a consistent http user_agent string. 
+# TODO: make one of the devices consistent with mobile
 
 # So now we have fake data that's almost lifelike.
 
@@ -18,17 +19,11 @@ from randmac import RandMac
 import ipaddress
 import random
 
-
 username_count = 10
-
-
-#[useragent_list,username_list] = make_hash.make_username_useragent_lists()
-#[atx_mac_ip,dfw_mac_ip,hou_mac_ip] = make_hash.make_mac_ip_dicts()
 
 class make_hash:
 	def __init__(self):
 		self.profile_data = {}
-		#self.user_profile = {}
 
 	def make_profile_hash(username_list,useragent_list,atx_mac_ip,dfw_mac_ip,hou_mac_ip):
 	# for each fname.lname pair, tie it to three uniq IP:MAC pairs in the same subnet
