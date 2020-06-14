@@ -19,7 +19,7 @@ from randmac import RandMac
 import ipaddress
 import random
 
-username_count = 10
+username_count = 1000
 
 class make_hash:
 	def __init__(self):
