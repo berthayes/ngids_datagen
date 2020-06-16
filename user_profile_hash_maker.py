@@ -18,8 +18,14 @@
 from randmac import RandMac
 import ipaddress
 import random
+import configparser
 
-username_count = 1000
+cfg = configparser.ConfigParser()
+cfg.read('ngids-datagen.conf')
+
+
+
+username_count = int(cfg.get('user_profile', 'username_count'))
 
 class make_hash:
 	def __init__(self):
@@ -73,9 +79,9 @@ class make_hash:
 
 	def make_username_useragent_lists():
 
-		last_names = './wordlists/uniq_last_names.txt'
-		first_names = './wordlists/uniq_first_names.txt'
-		user_agents = './wordlists/uniq_user_agents.txt'
+		last_names = cfg.get('wordlists', 'last_names')
+		first_names = cfg.get('wordlists', 'first_names')
+		user_agents = cfg.get('wordlists', 'user_agents')
 
 		# create a last_names[] array
 		with open(last_names, 'rt') as lnames:
@@ -115,28 +121,40 @@ class make_hash:
 
 
 	def make_mac_ip_dicts():
-	# for each IP address, give it a random MAC address
-	# print("adding atx_mac_ip")
+	# For each IP address, give it a random MAC address
+	# Idea during design was to represent 3 different office locations
 
-		atx_net = ipaddress.ip_network('172.16.0.0/20')
-		dfw_net = ipaddress.ip_network('192.168.0.0/16')
-		hou_net = ipaddress.ip_network('10.6.0.0/20')
+		# get network ranges and mac ranges from config file
+		atx_cidr = cfg.get('networks', 'atx_cidr')
+		dfw_cidr = cfg.get('networks', 'dfw_cidr')
+		hou_cidr = cfg.get('networks', 'hou_cidr')
 
+		atx_mac_range = cfg.get('macs', 'atx_macs')
+		dfw_mac_range = cfg.get('macs', 'dfw_macs')
+		hou_mac_range = cfg.get('macs', 'hou_macs')
+
+		# Create list of IP addresses for each location		
+		atx_net = ipaddress.ip_network(atx_cidr)
+		dfw_net = ipaddress.ip_network(dfw_cidr)
+		hou_net = ipaddress.ip_network(hou_cidr)
+
+
+		# make a hash of IP to MAC address for each location
+		# IPs are selected - for each in a list - no duplication
+		# MACs are generated randomly, duplicates are possible
 		atx_mac_ip = {}
 		for ip in atx_net:
-			 atx_mac = str(RandMac("de:ad:b1:00:00:00"))
+			 atx_mac = str(RandMac(atx_mac_range))
 			 atx_mac_ip[ip] = atx_mac
 
-		# print("adding dfw_mac_ip")
 		dfw_mac_ip = {}
 		for ip in dfw_net:
-			dfw_mac = str(RandMac("ca:fe:b2:00:00:00"))
+			dfw_mac = str(RandMac(dfw_mac_range))
 			dfw_mac_ip[ip] = dfw_mac
 
-		# print("adding hou_mac_ip")
 		hou_mac_ip = {}
 		for ip in hou_net:
-			hou_mac = str(RandMac("ba:be:b3:00:00:00"))
+			hou_mac = str(RandMac(hou_mac_range))
 			hou_mac_ip[ip] = hou_mac
 
 		return(atx_mac_ip,dfw_mac_ip,hou_mac_ip)	

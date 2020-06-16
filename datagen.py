@@ -12,6 +12,12 @@ import json
 from kafka import KafkaProducer
 import user_profile_hash_maker as uphm
 import argparse
+import configparser
+
+# Parse configs
+cfg = configparser.ConfigParser()
+cfg.read('ngids-datagen.conf')
+
 
 # Parse args - get money
 parser = argparse.ArgumentParser(description=
@@ -21,15 +27,17 @@ parser.add_argument('-t', dest='time_delay', action='store', default=0, help='ho
 
 args = parser.parse_args()
 
-urls = './wordlists/shorter_urls.txt'
-mimetypes = './wordlists/mimetypes.txt'
-host2ip = './host2ip.txt'
+urls = cfg.get('wordlists', 'urls')
+mimetypes = cfg.get('wordlists', 'mimetypes')
+host2ip = cfg.get('wordlists', 'host2ip')
+bootstrap_servers = cfg.get('kafka', 'bootstrap-servers')
 
-producer = KafkaProducer(bootstrap_servers=['192.168.1.108:9092'])
+
 
 def to_kafka(data):
-	# From https://kafka-python.readthedocs.io/en/master/usage.html
+	# [mostly] From https://kafka-python.readthedocs.io/en/master/usage.html
 	# Asynchronous by default
+	producer = KafkaProducer(bootstrap_servers=[bootstrap_servers])
 	future = producer.send('noodles', data.encode('utf-8'))
 
 	# Block for 'synchronous' sends
@@ -89,7 +97,8 @@ def make_event(profile):
 			ids_event["md5"] = event_hash.hexdigest()
 
 		except:
-			print("I am slain")
+			print("I am slain!")
+			exit()
 	return(ids_event)
 
 # create a urls[] array
