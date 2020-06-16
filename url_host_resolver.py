@@ -14,25 +14,30 @@ import dns.resolver
 import json
 import time
 import argparse
+import configparser
 
 parser = argparse.ArgumentParser(description=
     '''This script reads a file of URLs and resolves hostnames to create a file of hostname:IP JSON objects''')
-parser.add_argument('-i', dest='urls', action='store', default='./urls.txt', help='Input file of URLs - one per line, please' )
+parser.add_argument('-i', dest='url_file', action='store', default='./wordlists/urls.txt', help='Input file of URLs - one per line, please' )
 parser.add_argument('-o', dest='json_output', action='store', default='./host2ip.txt', help='Output file for hostname:IP JSON objects')
 
 args = parser.parse_args()
 
+cfg=configparser.ConfigParser()
+
+
 bofh = 0 # you'll know
 
-if args.urls:
-	urls = args.urls
+if args.url_file:
+	url_file = args.url_file
 else:
-	urls = './wordlists/urls.txt'
+	url_file = cfg.get('url_resolver', 'urls')
+
 
 if args.json_output:
 	json_output = args.json_output
 else:
-	json_output = './host2ip.txt'
+	json_output = cfg.get('url_resolver', 'json_output')
 
 
 def dedupe(array):
@@ -43,7 +48,7 @@ def dedupe(array):
 			seen.add(host)
 
 
-with open(urls,'rt') as urls:
+with open(url_file,'rt') as urls:
 	url_list = []
 	for line in urls:
 		line = line.strip()
