@@ -143,21 +143,22 @@ user_profile = uphm.make_hash.make_profile_hash(username_list, useragent_list, a
 if int(args.count) > 0:
 	count = int(args.count)
 	for x in range(0, count):
+		if int(args.time_delay) > 0:
+			time.sleep(int(args.time_delay))
 		ids_event = make_event(user_profile)
 		json_event = json.dumps(ids_event)
 		try:
 			to_kafka(json_event)
 		except:
 			print("Can't send event to Kafka")
-		if int(args.time_delay) > 0:
-			time.sleep(int(args.time_delay))
 else:
 	while 1:
+		if int(args.time_delay) > 0:
+			time.sleep(int(args.time_delay))
 		ids_event=make_event(user_profile)	
 		json_event = json.dumps(ids_event)
 		try:
 			to_kafka(json_event)
 		except:
 			print("Can't send event to Kafka")
-			if int(args.time_delay) > 0:
-				time.sleep(int(args.time_delay))
+			
