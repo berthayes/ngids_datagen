@@ -39,7 +39,7 @@ $ pip3 install kafka
 
 ```
 $ ./datagen.py -h
-usage: datagen.py [-h] [-c COUNT] [-t TIME_DELAY]
+usage: datagen.py [-h] [-c COUNT] [-t TIME_DELAY] [-o]
 
 This script generates a real-looking fake IDS event and sends it to your Kafka
 cluster
@@ -50,6 +50,7 @@ optional arguments:
                  infinite
   -t TIME_DELAY  how many seconds to wait between creating events - default is
                  0
+  -o             use to send json event to stdout
 ```
 
 
