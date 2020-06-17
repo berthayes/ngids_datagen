@@ -24,6 +24,7 @@ parser = argparse.ArgumentParser(description=
     '''This script generates a real-looking fake IDS event and sends it to your Kafka cluster''')
 parser.add_argument('-c', dest='count', action='store', default=-1, help='how many events to generate and send to Kafka - default is infinite' )
 parser.add_argument('-t', dest='time_delay', action='store', default=0, help='how many seconds to wait between creating events - default is 0')
+parser.add_argument('-o', dest='output', action='store_true', help='use to send json event to stdout')
 
 args = parser.parse_args()
 
@@ -31,6 +32,7 @@ urls = cfg.get('wordlists', 'urls')
 mimetypes = cfg.get('wordlists', 'mimetypes')
 host2ip = cfg.get('wordlists', 'host2ip')
 bootstrap_servers = cfg.get('kafka', 'bootstrap-servers')
+topic = cfg.get('kafka', 'topic')
 
 
 
@@ -38,7 +40,7 @@ def to_kafka(data):
 	# [mostly] From https://kafka-python.readthedocs.io/en/master/usage.html
 	# Asynchronous by default
 	producer = KafkaProducer(bootstrap_servers=[bootstrap_servers])
-	future = producer.send('noodles', data.encode('utf-8'))
+	future = producer.send(topic, data.encode('utf-8'))
 
 	# Block for 'synchronous' sends
 	try:
@@ -147,6 +149,8 @@ if int(args.count) > 0:
 			time.sleep(int(args.time_delay))
 		ids_event = make_event(user_profile)
 		json_event = json.dumps(ids_event)
+		if args.output:
+			print(json_event)
 		try:
 			to_kafka(json_event)
 		except:
@@ -157,6 +161,8 @@ else:
 			time.sleep(int(args.time_delay))
 		ids_event=make_event(user_profile)	
 		json_event = json.dumps(ids_event)
+		if args.output:
+			print(json_event)
 		try:
 			to_kafka(json_event)
 		except:
