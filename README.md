@@ -9,7 +9,7 @@
  The timestamp field `ts` will be current, the hostname in the `url` field should resolve to the `remote_ip` field.  The `local_ip`, `local_mac`, and `user_agent` fields are randomly generated when the script starts, then follow the user for every generated event.  `dest_port` will be 80 or 443 depending on if the URL is http or https.
 
  ## Fake PII
- In addition to regular web-traffic inside->out firewall events, events will be generated that represent a junior developer testing a web application. Test include passing customer names and SSNs via GET to a dev platform hosted in the Cloud. Your job: Find them and stop them!
+ In addition to regular web-traffic inside->out firewall events, events will be generated that represent a junior developer testing a web application. Tests include passing customer names and SSNs via GET to a dev platform hosted in the Cloud. Your job: Find them and stop them!
 
  ```JSON
 {
@@ -54,7 +54,7 @@ This script generates a real-looking fake IDS event and sends it to your choice 
 
 options:
   -h, --help     show this help message and exit
-  -c COUNT       how many events to generate and send to Kafka - default is infinite
+  -c COUNT       how many events to generate and send - default is infinite
   -t TIME_DELAY  how many seconds to wait between creating events - default is 0
   -o             use to send json event to stdout
   -k             use to send json event to Kafka

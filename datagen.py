@@ -23,7 +23,7 @@ import requests
 # Parse command line arguments
 parser = argparse.ArgumentParser(description=
     '''This script generates a real-looking fake IDS event and sends it to your choice of Kafka, Syslog, stdout, or HTTP''')
-parser.add_argument('-c', dest='count', action='store', default=-1, help='how many events to generate and send to Kafka - default is infinite' )
+parser.add_argument('-c', dest='count', action='store', default=-1, help='how many events to generate and send - default is infinite' )
 parser.add_argument('-t', dest='time_delay', action='store', default=0, help='how many seconds to wait between creating events - default is 0')
 parser.add_argument('-o', dest='output', action='store_true', help='use to send json event to stdout')
 parser.add_argument('-k', dest='kafka', action='store_true', help='use to send json event to Kafka')
