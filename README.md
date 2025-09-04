@@ -1,56 +1,65 @@
 # ngids_datagen
- Generate random data from your Bertronix 2000 Firewall and send them to Apache Kafka.
+ Generate *real-ish looking* random data (with a smidgen of fake PII) from your Bertronix 2000 NG-Firewall and send it out via Syslog, over HTTP, Apache Kafka or plain old standard output. 
 
- This is Yet Another Random Data Generator.  There are others like it, but this one is mine.  This DG will create *real-ish looking* events from a fictional Next-Gen Firewall/IDS/IPS.
-
- This is handy for load testing, running your own example code, or developing your own apps, etc.
+ This is handy for load testing, trying to catch SSNs off the wire, running your own example code, or developing your own apps, etc.
 
  ## Real-ish Looking Events
+ These fake events are designed to mimic events from a NG-Firewall/IDS (presumably with MITM SSL enabled) at the border(s) of a distributed organization. 
+ 
  The timestamp field `ts` will be current, the hostname in the `url` field should resolve to the `remote_ip` field.  The `local_ip`, `local_mac`, and `user_agent` fields are randomly generated when the script starts, then follow the user for every generated event.  `dest_port` will be 80 or 443 depending on if the URL is http or https.
 
+ ## Fake PII
+ In addition to regular web-traffic inside->out firewall events, events will be generated that represent a junior developer testing a web application. Test include passing customer names and SSNs via GET to a dev platform hosted in the Cloud. Your job: Find them and stop them!
+
  ```JSON
- {
-  "url": "https://myspace.com/ligula/in.xml?eleifend=aenean&quam=auctor&a=gravida&odio=sem&in=praesent",
-  "remote_ip": "63.135.90.70",
-  "username": "nila.younger",
-  "local_ip": "192.168.14.152",
-  "local_mac": "'ca:fe:b2:87:c3:df'",
-  "user_agent": "Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/ 20120405 Firefox/14.0.1",
-  "dest_port": 443,
-  "local_port": 51763,
-  "rtt": 1.166855,
-  "bytes": 5973,
+{
+  "bytes": 4846,
+  "dest_port": 80,
+  "local_ip": "192.168.131.245",
+  "local_mac": "b2:f4:32:69:8f:20",
+  "local_port": 35001,
+  "md5": "07f241fd1254765aa2647250d62a22d1",
   "method": "POST",
+  "mimetype": "text/javascript",
   "proto": "tcp",
-  "mimetype": "application/rtf",
-  "ts": 1592127451.520935,
-  "md5": "06180dd3c0fce2c8cc2d6dd89b1b20cf"
+  "remote_ip": "103.242.31.33",
+  "rtt": 1.257245,
+  "ts": 1756934963.756185,
+  "url": "http://xrea.com/eu/massa.js?lorem=venenatis&ipsum=lacinia&dolor=aenean&sit=sit&amet=amet",
+  "user_agent": "Mozilla/5.0 (Windows NT 6.1; en-US) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.750.0 Safari/534.30",
+  "username": "dewey.mumford"
 }
 ```
 
  ### Requirements:
+ Create a virtual environment for Python and install libraries
+
+ ```sh
+ python3 -m venv ./.venv
  ```
- $ sudo apt-get install python3-pip
+ ```sh
+./.venv/bin/python3 -m pip install dnspython
+./.venv/bin/python3 -m pip install randmac
+./.venv/bin/python3 -m pip install kafka-python
+./.venv/bin/python3 -m pip install requests
+./.venv/bin/python3 -m pip install syslog_rfc5424_formatter
+ ```
 
-$ pip3 install dnspython
-$ pip3 install randmac
-$ pip3 install kafka
+
 ```
+$ ./.venv/bin/python3 datagen.py -h
+usage: datagen.py [-h] [-c COUNT] [-t TIME_DELAY] [-o] [-k] [-s] [-w]
 
-```
-$ ./datagen.py -h
-usage: datagen.py [-h] [-c COUNT] [-t TIME_DELAY] [-o]
+This script generates a real-looking fake IDS event and sends it to your choice of Kafka, Syslog, stdout, or HTTP
 
-This script generates a real-looking fake IDS event and sends it to your Kafka
-cluster
-
-optional arguments:
+options:
   -h, --help     show this help message and exit
-  -c COUNT       how many events to generate and send to Kafka - default is
-                 infinite
-  -t TIME_DELAY  how many seconds to wait between creating events - default is
-                 0
+  -c COUNT       how many events to generate and send to Kafka - default is infinite
+  -t TIME_DELAY  how many seconds to wait between creating events - default is 0
   -o             use to send json event to stdout
+  -k             use to send json event to Kafka
+  -s             use to send json event out via syslog
+  -w             use to send json event out via HTTP
 ```
 
 
